@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HiringStack.io - AI-Powered Tech Job Description Evaluator</title>
+    <meta name="description" content="Get your tech job description evaluated in 24 hours. Built by engineering leaders, for engineering leaders.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #ffffff;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+        
+        .subtitle {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .section {
+            margin: 60px 0;
+        }
+        
+        .section h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .feature {
+            background: #f9fafb;
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        
+        .feature:hover {
+            border-color: #667eea;
+            transform: translateY(-4px);
+        }
+        
+        .feature-icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+        
+        .feature h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+        
+        .feature p {
+            color: #666;
+            font-size: 15px;
+        }
+        
+        .categories {
+            background: #f9fafb;
+            padding: 40px;
+            border-radius: 12px;
+            margin: 40px 0;
+        }
+        
+        .categories h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .category-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .category-item {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            font-size: 15px;
+        }
+        
+        .category-number {
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .how-it-works {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .steps {
+            display: grid;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: start;
+            gap: 20px;
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .step-content h4 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .step-content p {
+            color: #666;
+            font-size: 15px;
+        }
+        
+        .form-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .form-section h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .form-section p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+        
+        .credibility {
+            text-align: center;
+            padding: 40px 20px;
+            background: #f9fafb;
+            border-radius: 12px;
+        }
+        
+        .credibility p {
+            font-size: 16px;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+            
+            .subtitle {
+                font-size: 18px;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">HiringStack.io</div>
+            <div class="tagline">Built by Engineering Leaders, for Engineering Leaders</div>
+            
+            <h1>Is Your Tech Job Description Actually Working?</h1>
+            <p class="subtitle">Get your JD evaluated across 7 critical categories in 24 hours. Free.</p>
+            
+            <a href="#submit" class="cta-button">Evaluate My Job Description</a>
+        </header>
+        
+        <section class="section">
+            <h2>Why Most Tech JDs Fail</h2>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🚫</div>
+                    <h3>Biased Language</h3>
+                    <p>"Rockstar" and "ninja" terms that exclude qualified candidates</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">❌</div>
+                    <h3>Impossible Requirements</h3>
+                    <p>"10 years React experience" when React is only 12 years old</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">💰</div>
+                    <h3>No Compensation Info</h3>
+                    <p>Vague "competitive salary" that makes candidates skip your role</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">📋</div>
+                    <h3>Role Overload</h3>
+                    <p>Three jobs disguised as one "full-stack" position</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <div class="categories">
+                <h3>We Evaluate 7 Critical Categories</h3>
+                <div class="category-list">
+                    <div class="category-item">
+                        <span class="category-number">1.</span> Role Clarity & Context
+                    </div>
+                    <div class="category-item">
+                        <span class="category-number">2.</span> Required Skills & Experience
+                    </div>
+                    <div class="category-item">
+                        <span class="category-number">3.</span> Impact & Responsibilities
+                    </div>
+                    <div class="category-item">
+                        <span class="category-number">4.</span> Inclusivity & Bias
+                    </div>
+                    <div class="category-item">
+                        <span class="category-number">5.</span> Candidate Value Proposition
+                    </div>
+                    <div class="category-item">
+                        <span class="category-number">6.</span> Structure & Readability
+                    </div>
+                    <div class="category-item">
+                        <span class="category-number">7.</span> Hiring Process & Practicality
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>How It Works</h2>
+            
+            <div class="how-it-works">
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Submit Your Job Description</h4>
+                            <p>Paste your JD into our form. Takes 30 seconds.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>We Evaluate</h4>
+                            <p>Our AI evaluates your JD across 7 categories based on best practices from engineering leaders.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Get Results in 24 Hours</h4>
+                            <p>Receive a detailed evaluation with specific fixes and recommendations via email.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section form-section" id="submit">
+            <h2>Ready to Improve Your Job Description?</h2>
+            <p>Submit your JD and get actionable feedback within 24 hours</p>
+            
+            <!-- Replace this URL with your actual Google Form URL -->
+            <a href="https://forms.google.com/YOUR-FORM-ID" class="cta-button" style="background: white; color: #667eea;">
+                Submit Job Description →
+            </a>
+            
+            <p style="margin-top: 20px; font-size: 14px; opacity: 0.9;">
+                100% free • No signup required • Results in 24 hours
+            </p>
+        </section>
+        
+        <section class="section credibility">
+            <p>
+                <strong>Built by an engineering leader who's hired across North and South America.</strong><br>
+                I've seen hundreds of job descriptions, built hiring processes from scratch, and know what actually works. 
+                This tool is my way of helping engineering teams hire better by starting with better job descriptions.
+            </p>
+        </section>
+    </div>
+    
+    <footer>
+        <p>HiringStack.io © 2025 | Built with ❤️ for engineering leaders</p>
+    </footer>
+</body>
+</html>
