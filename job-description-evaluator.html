@@ -5,54 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Description Evaluator - HiringStack.io</title>
     <meta name="description" content="Evaluate your tech job description across 7 critical categories. Get actionable feedback instantly.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Arial, sans-serif;
-            line-height: 1.6;
-            color: #1a1a1a;
-            background: #f8f9fa;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
-        
-        h1 {
-            font-size: 36px;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 12px;
-            line-height: 1.2;
-        }
-        
-        .subtitle {
-            font-size: 18px;
-            color: #64748b;
-            margin-bottom: 40px;
         }
         
         .evaluator-card {
@@ -574,18 +554,6 @@
         }
         
         @media (max-width: 768px) {
-            .container {
-                padding: 20px 16px;
-            }
-            
-            h1 {
-                font-size: 28px;
-            }
-            
-            .subtitle {
-                font-size: 16px;
-            }
-            
             .evaluator-card,
             .results-card {
                 padding: 24px;
@@ -601,12 +569,57 @@
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <div class="logo">HiringStack.io</div>
-            <h1>Job Description Evaluator</h1>
-            <p class="subtitle">Get instant feedback on your job description across 7 critical categories</p>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+  <!-- Navbar -->
+  <nav class="bg-white border-b border-gray-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <a href="/" class="flex items-center space-x-2">
+            <div class="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-800 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-lg">H</span>
+            </div>
+            <span class="text-xl font-semibold text-gray-900">HiringStack</span>
+          </a>
+        </div>
+        
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="/" class="text-gray-700 hover:text-primary-600 font-medium transition-colors duration-200">Home</a>
+          <a href="job-description-evaluator.html" class="text-primary-600 font-medium transition-colors duration-200">Tools</a>
+          <span class="text-gray-400 font-medium cursor-not-allowed">Resources</span>
+          <span class="text-gray-400 font-medium cursor-not-allowed">Open Source</span>
+        </div>
+        
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+          <button type="button" class="text-gray-700 hover:text-primary-600 focus:outline-none" id="mobile-menu-button">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Mobile Menu -->
+      <div class="hidden md:hidden pb-4" id="mobile-menu">
+        <div class="flex flex-col space-y-2">
+          <a href="/" class="text-gray-700 hover:text-primary-600 font-medium py-2 transition-colors duration-200">Home</a>
+          <a href="job-description-evaluator.html" class="text-primary-600 font-medium py-2 transition-colors duration-200">Tools</a>
+          <span class="text-gray-400 font-medium py-2 cursor-not-allowed">Resources</span>
+          <span class="text-gray-400 font-medium py-2 cursor-not-allowed">Open Source</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">Job Description Evaluator</h1>
+            <p class="text-lg sm:text-xl text-gray-600">Get instant feedback on your job description across 7 critical categories</p>
         </header>
         
         <div class="evaluator-card">
@@ -710,6 +723,24 @@
             <ul id="bonusImprovements" class="bonus-list"></ul>
         </div>
     </div>
+    </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-200 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p class="text-center text-sm text-gray-500">
+        Built by <a href="https://linkedin.com/in/hamidmoosavian" class="text-primary-600 hover:text-primary-700 font-medium transition-colors duration-200">Hamid Moosavian</a>
+      </p>
+    </div>
+  </footer>
+    
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
     
     <script>
         const form = document.getElementById('evaluateForm');
