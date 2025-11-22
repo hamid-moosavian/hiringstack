@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Report - HiringStack</title>
+    <meta name="description" content="Sample job description evaluation report from HiringStack">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .results-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .score-section {
+            text-align: center;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+        
+        .score-section.green {
+            background: #f0fdf4;
+            border: 2px solid #86efac;
+        }
+        
+        .score-section.yellow {
+            background: #fffbeb;
+            border: 2px solid #fcd34d;
+        }
+        
+        .score-section.red {
+            background: #fef2f2;
+            border: 2px solid #fca5a5;
+        }
+        
+        .score-value {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+        
+        .score-section.green .score-value {
+            color: #16a34a;
+        }
+        
+        .score-section.yellow .score-value {
+            color: #d97706;
+        }
+        
+        .score-section.red .score-value {
+            color: #dc2626;
+        }
+        
+        .score-rating {
+            font-size: 20px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 4px;
+        }
+        
+        .score-label {
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 20px;
+            margin-top: 32px;
+        }
+        
+        .section-title:first-child {
+            margin-top: 0;
+        }
+        
+        .categories-list {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .category-item {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #e2e8f0;
+        }
+        
+        .category-item.pass {
+            border-left-color: #22c55e;
+            background: #f0fdf4;
+        }
+        
+        .category-item.warning {
+            border-left-color: #f59e0b;
+            background: #fffbeb;
+        }
+        
+        .category-item.fail {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+        
+        .category-item.bonus {
+            border-left-color: #8b5cf6;
+            background: #faf5ff;
+        }
+        
+        .category-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .category-content {
+            flex: 1;
+        }
+        
+        .category-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+        
+        .category-rating {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        
+        .category-item.pass .category-rating {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        
+        .category-item.warning .category-rating {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .category-item.fail .category-rating {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .category-item.bonus .category-rating {
+            background: #e9d5ff;
+            color: #9333ea;
+        }
+        
+        .category-notes {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.5;
+        }
+        
+        .fixes-list {
+            list-style: none;
+            counter-reset: fix-counter;
+        }
+        
+        .fixes-list li {
+            counter-increment: fix-counter;
+            padding: 12px 0 12px 36px;
+            position: relative;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 15px;
+            color: #334155;
+            line-height: 1.6;
+        }
+        
+        .fixes-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .fixes-list li::before {
+            content: counter(fix-counter);
+            position: absolute;
+            left: 0;
+            top: 12px;
+            width: 24px;
+            height: 24px;
+            background: #2563eb;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .bonus-list {
+            list-style: none;
+        }
+        
+        .bonus-list li {
+            padding: 10px 0 10px 28px;
+            position: relative;
+            font-size: 15px;
+            color: #334155;
+            line-height: 1.6;
+        }
+        
+        .bonus-list li::before {
+            content: "⭐";
+            position: absolute;
+            left: 0;
+            top: 10px;
+            font-size: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .results-card {
+                padding: 24px;
+            }
+            
+            .score-value {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+  <!-- Navbar -->
+  <nav class="bg-white border-b border-gray-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <a href="/" class="flex items-center space-x-2">
+            <div class="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-800 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-lg">H</span>
+            </div>
+            <span class="text-xl font-semibold text-gray-900">HiringStack</span>
+          </a>
+        </div>
+        
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="/" class="text-gray-700 hover:text-primary-600 font-medium transition-colors duration-200">Home</a>
+          <a href="job-description-evaluator.html" class="text-gray-700 hover:text-primary-600 font-medium transition-colors duration-200">Tools</a>
+          <span class="text-gray-400 font-medium cursor-not-allowed">Resources</span>
+          <span class="text-gray-400 font-medium cursor-not-allowed">Open Source</span>
+        </div>
+        
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+          <button type="button" class="text-gray-700 hover:text-primary-600 focus:outline-none" id="mobile-menu-button">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Mobile Menu -->
+      <div class="hidden md:hidden pb-4" id="mobile-menu">
+        <div class="flex flex-col space-y-2">
+          <a href="/" class="text-gray-700 hover:text-primary-600 font-medium py-2 transition-colors duration-200">Home</a>
+          <a href="job-description-evaluator.html" class="text-gray-700 hover:text-primary-600 font-medium py-2 transition-colors duration-200">Tools</a>
+          <span class="text-gray-400 font-medium py-2 cursor-not-allowed">Resources</span>
+          <span class="text-gray-400 font-medium py-2 cursor-not-allowed">Open Source</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <div id="resultsCard" class="results-card">
+            <div id="scoreSection" class="score-section green">
+                <div class="score-value" id="scoreValue">90</div>
+                <div class="score-rating" id="scoreRating">Excellent</div>
+                <div class="score-label">Overall Score</div>
+            </div>
+            
+            <h2 class="section-title">Category Breakdown</h2>
+            <div id="categoriesList" class="categories-list">
+                <div class="category-item pass">
+                    <span class="category-icon">✅</span>
+                    <div class="category-content">
+                        <div class="category-name">Role Clarity &amp; Context</div>
+                        <span class="category-rating">PASS</span>
+                        <div class="category-notes">Clear title, team context, and reporting line provided.</div>
+                    </div>
+                </div>
+                <div class="category-item pass">
+                    <span class="category-icon">✅</span>
+                    <div class="category-content">
+                        <div class="category-name">Required Skills &amp; Experience</div>
+                        <span class="category-rating">PASS</span>
+                        <div class="category-notes">Tech stack and experience requirements are realistic and clear.</div>
+                    </div>
+                </div>
+                <div class="category-item warning">
+                    <span class="category-icon">⚠️</span>
+                    <div class="category-content">
+                        <div class="category-name">Impact &amp; Responsibilities</div>
+                        <span class="category-rating">WARNING</span>
+                        <div class="category-notes">Responsibilities are mostly activity-focused with some broad scope.</div>
+                    </div>
+                </div>
+                <div class="category-item bonus">
+                    <span class="category-icon">⭐</span>
+                    <div class="category-content">
+                        <div class="category-name">Inclusivity &amp; Bias</div>
+                        <span class="category-rating">BONUS</span>
+                        <div class="category-notes">Inclusive language and accessibility statements are explicitly present.</div>
+                    </div>
+                </div>
+                <div class="category-item bonus">
+                    <span class="category-icon">⭐</span>
+                    <div class="category-content">
+                        <div class="category-name">Candidate Value Proposition</div>
+                        <span class="category-rating">BONUS</span>
+                        <div class="category-notes">Salary range, benefits, and growth opportunities are clearly outlined.</div>
+                    </div>
+                </div>
+                <div class="category-item pass">
+                    <span class="category-icon">✅</span>
+                    <div class="category-content">
+                        <div class="category-name">Structure &amp; Readability</div>
+                        <span class="category-rating">PASS</span>
+                        <div class="category-notes">Well-structured with clear sections and concise language.</div>
+                    </div>
+                </div>
+                <div class="category-item warning">
+                    <span class="category-icon">⚠️</span>
+                    <div class="category-content">
+                        <div class="category-name">Hiring Process &amp; Practicality</div>
+                        <span class="category-rating">WARNING</span>
+                        <div class="category-notes">Hiring process signals are vague and not explicitly detailed.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">Priority Fixes</h2>
+            <ol id="priorityFixes" class="fixes-list">
+                <li>Clarify interview stages and assessment format</li>
+                <li>Specify measurable outcomes for responsibilities</li>
+                <li>Separate required vs nice-to-have qualifications</li>
+            </ol>
+            
+            <h2 class="section-title">Bonus Improvements</h2>
+            <ul id="bonusImprovements" class="bonus-list">
+                <li>Include specific success metrics for the role</li>
+                <li>Add a timeline for the hiring process</li>
+            </ul>
+        </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-200 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="text-sm text-gray-500 flex items-center justify-center">
+        Built by Hamid Moosavian
+        <a
+          href="https://www.linkedin.com/in/hamid-moosavian"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center ml-2 text-gray-500 hover:text-primary-600 transition-colors duration-200"
+          aria-label="LinkedIn profile"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            class="h-4 w-4 fill-current"
+            aria-hidden="true"
+          >
+            <path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.24 8.25H4.7V24H.24V8.25zM8.34 8.25H12.6V10h.06c.6-1.1 2.06-2.26 4.24-2.26 4.53 0 5.36 2.98 5.36 6.86V24h-4.46v-7.5c0-1.79-.03-4.09-2.5-4.09-2.5 0-2.88 1.95-2.88 3.96V24H8.34V8.25z" />
+          </svg>
+        </a>
+      </span>
+    </div>
+  </footer>
+
+  <!-- Mobile Menu Toggle Script -->
+  <script>
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>
+
