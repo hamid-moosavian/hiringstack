@@ -3,1037 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Description Evaluator - HiringStack.io</title>
-    <meta name="description" content="Evaluate your tech job description across 7 critical categories. Get actionable feedback instantly.">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Arial, sans-serif;
-            line-height: 1.6;
-            color: #1a1a1a;
-            background: #f8f9fa;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
-        
-        h1 {
-            font-size: 36px;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 12px;
-            line-height: 1.2;
-        }
-        
-        .subtitle {
-            font-size: 18px;
-            color: #64748b;
-            margin-bottom: 40px;
-        }
-        
-        .evaluator-card {
-            background: white;
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e2e8f0;
-            margin-bottom: 30px;
-            transition: box-shadow 0.2s;
-        }
-        
-        .evaluator-card:focus-within {
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
-        }
-        
-        .input-group {
-            margin-bottom: 24px;
-        }
-        
-        label {
-            display: block;
-            font-weight: 600;
-            font-size: 14px;
-            color: #334155;
-            margin-bottom: 8px;
-        }
-        
-        textarea {
-            width: 100%;
-            min-height: 300px;
-            padding: 16px;
-            font-size: 15px;
-            font-family: inherit;
-            line-height: 1.6;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            resize: vertical;
-            transition: border-color 0.2s;
-            background: #fafbfc;
-        }
-        
-        textarea:focus {
-            outline: none;
-            border-color: #2563eb;
-            background: white;
-        }
-        
-        textarea::placeholder {
-            color: #94a3b8;
-        }
-        
-        .char-counter {
-            font-size: 12px;
-            color: #94a3b8;
-            margin-top: 6px;
-            text-align: right;
-        }
-        
-        .char-counter.warning {
-            color: #f59e0b;
-        }
-        
-        .char-counter.error {
-            color: #ef4444;
-        }
-        
-        .button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 14px 32px;
-            font-size: 16px;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
-            min-width: 160px;
-        }
-        
-        .button:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
-        }
-        
-        .button:active:not(:disabled) {
-            transform: translateY(0);
-        }
-        
-        .button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .button.loading {
-            position: relative;
-            color: transparent;
-        }
-        
-        .button.loading::after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            top: 50%;
-            left: 50%;
-            margin-left: -10px;
-            margin-top: -10px;
-            border: 2px solid white;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 0.6s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .error-message {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #991b1b;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        
-        .results-card {
-            background: white;
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e2e8f0;
-            animation: fadeIn 0.4s ease-out;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .score-section {
-            text-align: center;
-            padding: 30px;
-            border-radius: 12px;
-            margin-bottom: 40px;
-        }
-        
-        .score-section.green {
-            background: #f0fdf4;
-            border: 2px solid #86efac;
-        }
-        
-        .score-section.yellow {
-            background: #fffbeb;
-            border: 2px solid #fcd34d;
-        }
-        
-        .score-section.red {
-            background: #fef2f2;
-            border: 2px solid #fca5a5;
-        }
-        
-        .score-value {
-            font-size: 64px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            line-height: 1;
-        }
-        
-        .score-section.green .score-value {
-            color: #16a34a;
-        }
-        
-        .score-section.yellow .score-value {
-            color: #d97706;
-        }
-        
-        .score-section.red .score-value {
-            color: #dc2626;
-        }
-        
-        .score-rating {
-            font-size: 20px;
-            font-weight: 600;
-            color: #475569;
-            margin-bottom: 4px;
-        }
-        
-        .score-label {
-            font-size: 14px;
-            color: #64748b;
-        }
-        
-        .section-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 20px;
-            margin-top: 32px;
-        }
-        
-        .section-title:first-child {
-            margin-top: 0;
-        }
-        
-        .categories-list {
-            display: grid;
-            gap: 16px;
-            margin-bottom: 32px;
-        }
-        
-        .category-item {
-            display: flex;
-            align-items: start;
-            gap: 12px;
-            padding: 16px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #e2e8f0;
-        }
-        
-        .category-item.pass {
-            border-left-color: #22c55e;
-            background: #f0fdf4;
-        }
-        
-        .category-item.warning {
-            border-left-color: #f59e0b;
-            background: #fffbeb;
-        }
-        
-        .category-item.fail {
-            border-left-color: #ef4444;
-            background: #fef2f2;
-        }
-        
-        .category-item.bonus {
-            border-left-color: #8b5cf6;
-            background: #faf5ff;
-        }
-        
-        .category-icon {
-            font-size: 24px;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-        
-        .category-content {
-            flex: 1;
-        }
-        
-        .category-name {
-            font-weight: 600;
-            font-size: 16px;
-            color: #0f172a;
-            margin-bottom: 4px;
-        }
-        
-        .category-rating {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 6px;
-        }
-        
-        .category-item.pass .category-rating {
-            background: #dcfce7;
-            color: #16a34a;
-        }
-        
-        .category-item.warning .category-rating {
-            background: #fef3c7;
-            color: #d97706;
-        }
-        
-        .category-item.fail .category-rating {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-        
-        .category-item.bonus .category-rating {
-            background: #e9d5ff;
-            color: #9333ea;
-        }
-        
-        .category-notes {
-            font-size: 14px;
-            color: #475569;
-            line-height: 1.5;
-        }
-        
-        .fixes-list {
-            list-style: none;
-            counter-reset: fix-counter;
-        }
-        
-        .fixes-list li {
-            counter-increment: fix-counter;
-            padding: 12px 0 12px 36px;
-            position: relative;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 15px;
-            color: #334155;
-            line-height: 1.6;
-        }
-        
-        .fixes-list li:last-child {
-            border-bottom: none;
-        }
-        
-        .fixes-list li::before {
-            content: counter(fix-counter);
-            position: absolute;
-            left: 0;
-            top: 12px;
-            width: 24px;
-            height: 24px;
-            background: #2563eb;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .bonus-list {
-            list-style: none;
-        }
-        
-        .bonus-list li {
-            padding: 10px 0 10px 28px;
-            position: relative;
-            font-size: 15px;
-            color: #334155;
-            line-height: 1.6;
-        }
-        
-        .bonus-list li::before {
-            content: "⭐";
-            position: absolute;
-            left: 0;
-            top: 10px;
-            font-size: 16px;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .loading-card {
-            background: white;
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e2e8f0;
-            margin-bottom: 30px;
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        .loading-header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-        
-        .loading-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #0f172a;
-            margin-bottom: 8px;
-        }
-        
-        .loading-subtitle {
-            font-size: 15px;
-            color: #64748b;
-        }
-        
-        .progress-steps {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .progress-step {
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-        }
-        
-        .progress-step.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .step-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-        
-        .step-text {
-            font-size: 15px;
-            font-weight: 500;
-            color: #334155;
-        }
-        
-        .step-percentage {
-            font-size: 13px;
-            font-weight: 600;
-            color: #64748b;
-        }
-        
-        .progress-bar-container {
-            width: 100%;
-            height: 6px;
-            background: #e2e8f0;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%);
-            border-radius: 3px;
-            width: 0%;
-            transition: width 0.6s ease-out;
-        }
-        
-        .progress-step.active .progress-bar {
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.7;
-            }
-        }
-        
-        .progress-step.completed .step-text {
-            color: #16a34a;
-        }
-        
-        .progress-step.completed .step-percentage {
-            color: #16a34a;
-        }
-        
-        .progress-step.completed .progress-bar {
-            background: #22c55e;
-        }
-        
-        .timeout-message {
-            text-align: center;
-            padding: 24px;
-            background: #fff7ed;
-            border: 1px solid #fed7aa;
-            border-radius: 8px;
-            margin-top: 24px;
-        }
-        
-        .timeout-message-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #c2410c;
-            margin-bottom: 8px;
-        }
-        
-        .timeout-message-text {
-            font-size: 14px;
-            color: #9a3412;
-            line-height: 1.6;
-        }
-        
-        .timeout-actions {
-            margin-top: 16px;
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
-        
-        .button-secondary {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #475569;
-            background: white;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .button-secondary:hover {
-            background: #f8f9fa;
-            border-color: #94a3b8;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px 16px;
-            }
-            
-            h1 {
-                font-size: 28px;
-            }
-            
-            .subtitle {
-                font-size: 16px;
-            }
-            
-            .evaluator-card,
-            .results-card {
-                padding: 24px;
-            }
-            
-            .score-value {
-                font-size: 48px;
-            }
-            
-            textarea {
-                min-height: 250px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <div class="logo">HiringStack.io</div>
-            <h1>Job Description Evaluator</h1>
-            <p class="subtitle">Get instant feedback on your job description across 7 critical categories</p>
-        </header>
-        
-        <div class="evaluator-card">
-            <form id="evaluateForm">
-                <div class="input-group">
-                    <label for="jobDescription">Job Description</label>
-                    <textarea 
-                        id="jobDescription" 
-                        name="jobDescription" 
-                        placeholder="Paste your job description here... (minimum 100 characters)"
-                        minlength="100"
-                        required
-                    ></textarea>
-                    <div class="char-counter" id="charCounter">0 characters</div>
-                </div>
-                
-                <div id="errorMessage" class="error-message hidden"></div>
-                
-                <button type="submit" class="button" id="submitButton">
-                    Evaluate JD
-                </button>
-            </form>
-        </div>
-        
-        <div id="loadingCard" class="loading-card hidden">
-            <div class="loading-header">
-                <div class="loading-title">We're working hard on it</div>
-                <div class="loading-subtitle">Analyzing your job description...</div>
-            </div>
-            
-            <div class="progress-steps" id="progressSteps">
-                <div class="progress-step" data-step="0">
-                    <div class="step-header">
-                        <span class="step-text">Reading job description…</span>
-                        <span class="step-percentage">0%</span>
-                    </div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar" style="width: 0%"></div>
-                    </div>
-                </div>
-                
-                <div class="progress-step" data-step="1">
-                    <div class="step-header">
-                        <span class="step-text">Evaluating structure and clarity…</span>
-                        <span class="step-percentage">0%</span>
-                    </div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar" style="width: 0%"></div>
-                    </div>
-                </div>
-                
-                <div class="progress-step" data-step="2">
-                    <div class="step-header">
-                        <span class="step-text">Checking inclusivity and bias…</span>
-                        <span class="step-percentage">0%</span>
-                    </div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar" style="width: 0%"></div>
-                    </div>
-                </div>
-                
-                <div class="progress-step" data-step="3">
-                    <div class="step-header">
-                        <span class="step-text">Scoring overall quality…</span>
-                        <span class="step-percentage">0%</span>
-                    </div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="timeoutMessage" class="timeout-message hidden">
-                <div class="timeout-message-title">Still analyzing...</div>
-                <div class="timeout-message-text">Large descriptions can take up to a minute.</div>
-            </div>
-            
-            <div id="errorTimeoutMessage" class="timeout-message hidden" style="background: #fef2f2; border-color: #fecaca;">
-                <div class="timeout-message-title" style="color: #991b1b;">This one took too long to evaluate</div>
-                <div class="timeout-message-text" style="color: #7f1d1d;">Try shortening the job description or retrying.</div>
-                <div class="timeout-actions">
-                    <button class="button-secondary" onclick="window.location.reload()">Try Again</button>
-                </div>
-            </div>
-        </div>
-        
-        <div id="resultsCard" class="results-card hidden">
-            <div id="scoreSection" class="score-section">
-                <div class="score-value" id="scoreValue">-</div>
-                <div class="score-rating" id="scoreRating">-</div>
-                <div class="score-label">Overall Score</div>
-            </div>
-            
-            <h2 class="section-title">Category Breakdown</h2>
-            <div id="categoriesList" class="categories-list"></div>
-            
-            <h2 class="section-title">Priority Fixes</h2>
-            <ol id="priorityFixes" class="fixes-list"></ol>
-            
-            <h2 class="section-title">Bonus Improvements</h2>
-            <ul id="bonusImprovements" class="bonus-list"></ul>
-        </div>
-    </div>
-    
+    <title>HiringStack - Practical Tools and Resources for Engineering Leaders</title>
+    <meta name="description" content="Practical tools and resources for engineering leaders building better hiring systems.">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        const form = document.getElementById('evaluateForm');
-        const textarea = document.getElementById('jobDescription');
-        const charCounter = document.getElementById('charCounter');
-        const submitButton = document.getElementById('submitButton');
-        const errorMessage = document.getElementById('errorMessage');
-        const loadingCard = document.getElementById('loadingCard');
-        const progressSteps = document.getElementById('progressSteps');
-        const timeoutMessage = document.getElementById('timeoutMessage');
-        const errorTimeoutMessage = document.getElementById('errorTimeoutMessage');
-        const resultsCard = document.getElementById('resultsCard');
-        const scoreSection = document.getElementById('scoreSection');
-        const scoreValue = document.getElementById('scoreValue');
-        const scoreRating = document.getElementById('scoreRating');
-        const categoriesList = document.getElementById('categoriesList');
-        const priorityFixes = document.getElementById('priorityFixes');
-        const bonusImprovements = document.getElementById('bonusImprovements');
-        
-        const API_URL = 'https://hiringstack-api-git-main-hamid-moosavians-projects.vercel.app/evaluate-jd';
-        
-        let progressInterval = null;
-        let progressTimer = null;
-        let timeoutTimer = null;
-        let errorTimeoutTimer = null;
-        const STEP_DURATION = 8500; // 8.5 seconds per step (~34s total)
-        const TIMEOUT_WARNING = 45000; // 45 seconds
-        const ERROR_TIMEOUT = 60000; // 60 seconds
-        
-        // Character counter
-        textarea.addEventListener('input', () => {
-            const length = textarea.value.length;
-            charCounter.textContent = `${length} characters`;
-            
-            if (length < 100) {
-                charCounter.classList.add('error');
-                charCounter.classList.remove('warning');
-            } else if (length < 200) {
-                charCounter.classList.add('warning');
-                charCounter.classList.remove('error');
-            } else {
-                charCounter.classList.remove('warning', 'error');
-            }
-        });
-        
-        // Form submission
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const jobDescription = textarea.value.trim();
-            
-            if (jobDescription.length < 100) {
-                showError('Please enter at least 100 characters');
-                return;
-            }
-            
-            // Reset UI
-            hideError();
-            hideLoading();
-            resultsCard.classList.add('hidden');
-            submitButton.disabled = true;
-            submitButton.classList.add('loading');
-            
-            // Start loading animation
-            startLoadingProgress();
-            
-            const startTime = Date.now();
-            
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ jobDescription }),
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(data.error || 'Evaluation failed');
-                }
-                
-                if (data.success && data.evaluation) {
-                    // Stop loading animation
-                    stopLoadingProgress();
-                    displayResults(data.evaluation);
-                } else {
-                    throw new Error('Invalid response format');
-                }
-            } catch (error) {
-                stopLoadingProgress();
-                showError(error.message || 'Failed to evaluate job description. Please try again.');
-            } finally {
-                submitButton.disabled = false;
-                submitButton.classList.remove('loading');
-            }
-        });
-        
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.classList.remove('hidden');
-        }
-        
-        function hideError() {
-            errorMessage.classList.add('hidden');
-        }
-        
-        function startLoadingProgress() {
-            // Clear any existing timers
-            stopLoadingProgress();
-            
-            // Show loading card
-            loadingCard.classList.remove('hidden');
-            loadingCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            
-            // Reset all steps
-            const steps = progressSteps.querySelectorAll('.progress-step');
-            steps.forEach((step, index) => {
-                step.classList.remove('visible', 'active', 'completed');
-                const bar = step.querySelector('.progress-bar');
-                const percentage = step.querySelector('.step-percentage');
-                bar.style.width = '0%';
-                percentage.textContent = '0%';
-            });
-            
-            // Start first step
-            let currentStep = 0;
-            const totalSteps = steps.length;
-            const percentages = [25, 50, 75, 100];
-            
-            function showNextStep() {
-                if (currentStep > 0) {
-                    // Mark previous step as completed
-                    const prevStep = steps[currentStep - 1];
-                    prevStep.classList.remove('active');
-                    prevStep.classList.add('completed');
-                    const prevBar = prevStep.querySelector('.progress-bar');
-                    const prevPercentage = prevStep.querySelector('.step-percentage');
-                    prevBar.style.width = '100%';
-                    prevPercentage.textContent = '100%';
-                }
-                
-                if (currentStep < totalSteps) {
-                    // Show and animate current step
-                    const step = steps[currentStep];
-                    step.classList.add('visible', 'active');
-                    
-                    // Animate progress bar
-                    let progress = 0;
-                    const targetPercent = percentages[currentStep];
-                    const duration = STEP_DURATION;
-                    const startTime = Date.now();
-                    
-                    const animateProgress = () => {
-                        const elapsed = Date.now() - startTime;
-                        const percent = Math.min((elapsed / duration) * targetPercent, targetPercent);
-                        
-                        const bar = step.querySelector('.progress-bar');
-                        const percentage = step.querySelector('.step-percentage');
-                        bar.style.width = percent + '%';
-                        percentage.textContent = Math.round(percent) + '%';
-                        
-                        if (percent < targetPercent) {
-                            requestAnimationFrame(animateProgress);
-                        } else {
-                            // Move to next step after a short delay
-                            currentStep++;
-                            if (currentStep < totalSteps) {
-                                setTimeout(showNextStep, 300);
-                            } else {
-                                // All steps complete, keep last one at 100%
-                                step.classList.remove('active');
-                                step.classList.add('completed');
-                            }
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
                         }
-                    };
-                    
-                    animateProgress();
+                    }
                 }
             }
-            
-            // Start the first step
-            setTimeout(() => {
-                showNextStep();
-            }, 200);
-            
-            // Set timeout warnings
-            timeoutTimer = setTimeout(() => {
-                if (!loadingCard.classList.contains('hidden')) {
-                    timeoutMessage.classList.remove('hidden');
-                }
-            }, TIMEOUT_WARNING);
-            
-            errorTimeoutTimer = setTimeout(() => {
-                if (!loadingCard.classList.contains('hidden')) {
-                    stopLoadingProgress();
-                    timeoutMessage.classList.add('hidden');
-                    errorTimeoutMessage.classList.remove('hidden');
-                    submitButton.disabled = false;
-                    submitButton.classList.remove('loading');
-                }
-            }, ERROR_TIMEOUT);
-        }
-        
-        function stopLoadingProgress() {
-            // Clear all timers
-            if (timeoutTimer) {
-                clearTimeout(timeoutTimer);
-                timeoutTimer = null;
-            }
-            if (errorTimeoutTimer) {
-                clearTimeout(errorTimeoutTimer);
-                errorTimeoutTimer = null;
-            }
-            if (progressTimer) {
-                clearTimeout(progressTimer);
-                progressTimer = null;
-            }
-            
-            // Hide loading card
-            loadingCard.classList.add('hidden');
-            timeoutMessage.classList.add('hidden');
-            errorTimeoutMessage.classList.add('hidden');
-            
-            // Reset steps
-            const steps = progressSteps.querySelectorAll('.progress-step');
-            steps.forEach((step) => {
-                step.classList.remove('visible', 'active', 'completed');
-            });
-        }
-        
-        function hideLoading() {
-            stopLoadingProgress();
-        }
-        
-        function displayResults(evaluation) {
-            // Handle error case
-            if (evaluation.error) {
-                showError(evaluation.error || 'Failed to parse evaluation results');
-                return;
-            }
-            
-            // Display overall score
-            const score = evaluation.overall_score || 0;
-            scoreValue.textContent = score;
-            scoreRating.textContent = evaluation.overall_rating || 'Not rated';
-            
-            // Set score color
-            scoreSection.classList.remove('green', 'yellow', 'red');
-            if (score >= 80) {
-                scoreSection.classList.add('green');
-            } else if (score >= 60) {
-                scoreSection.classList.add('yellow');
-            } else {
-                scoreSection.classList.add('red');
-            }
-            
-            // Display categories
-            categoriesList.innerHTML = '';
-            if (evaluation.categories && Array.isArray(evaluation.categories)) {
-                evaluation.categories.forEach((category) => {
-                    const categoryItem = createCategoryItem(category);
-                    categoriesList.appendChild(categoryItem);
-                });
-            }
-            
-            // Display priority fixes
-            priorityFixes.innerHTML = '';
-            if (evaluation.priority_fixes && Array.isArray(evaluation.priority_fixes)) {
-                evaluation.priority_fixes.forEach((fix) => {
-                    const li = document.createElement('li');
-                    li.textContent = fix;
-                    priorityFixes.appendChild(li);
-                });
-            }
-            
-            // Display bonus improvements
-            bonusImprovements.innerHTML = '';
-            if (evaluation.bonus_improvements && Array.isArray(evaluation.bonus_improvements)) {
-                evaluation.bonus_improvements.forEach((improvement) => {
-                    const li = document.createElement('li');
-                    li.textContent = improvement;
-                    bonusImprovements.appendChild(li);
-                });
-            }
-            
-            // Show results
-            resultsCard.classList.remove('hidden');
-            resultsCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-        
-        function createCategoryItem(category) {
-            const item = document.createElement('div');
-            item.className = 'category-item';
-            
-            const rating = (category.rating || '').toUpperCase();
-            let icon = '✅';
-            let className = 'pass';
-            
-            if (rating === 'WARNING') {
-                icon = '⚠️';
-                className = 'warning';
-            } else if (rating === 'FAIL') {
-                icon = '❌';
-                className = 'fail';
-            } else if (rating === 'BONUS') {
-                icon = '⭐';
-                className = 'bonus';
-            }
-            
-            item.classList.add(className);
-            
-            item.innerHTML = `
-                <span class="category-icon">${icon}</span>
-                <div class="category-content">
-                    <div class="category-name">${category.name || 'Unknown Category'}</div>
-                    <span class="category-rating">${rating}</span>
-                    <div class="category-notes">${category.notes || ''}</div>
-                </div>
-            `;
-            
-            return item;
         }
     </script>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+  <!-- Navbar -->
+  <nav class="bg-white border-b border-gray-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <a href="/" class="flex items-center space-x-2">
+            <div class="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-800 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-lg">H</span>
+            </div>
+            <span class="text-xl font-semibold text-gray-900">HiringStack</span>
+          </a>
+        </div>
+        
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="/" class="text-gray-700 hover:text-primary-600 font-medium transition-colors duration-200">Home</a>
+          <a href="job-description-evaluator.html" class="text-gray-700 hover:text-primary-600 font-medium transition-colors duration-200">Tools</a>
+          <a href="/resources" class="text-gray-700 hover:text-primary-600 font-medium transition-colors duration-200">Resources</a>
+          <a href="/open-source" class="text-gray-700 hover:text-primary-600 font-medium transition-colors duration-200">Open Source</a>
+        </div>
+        
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+          <button type="button" class="text-gray-700 hover:text-primary-600 focus:outline-none" id="mobile-menu-button">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Mobile Menu -->
+      <div class="hidden md:hidden pb-4" id="mobile-menu">
+        <div class="flex flex-col space-y-2">
+          <a href="/" class="text-gray-700 hover:text-primary-600 font-medium py-2 transition-colors duration-200">Home</a>
+          <a href="job-description-evaluator.html" class="text-gray-700 hover:text-primary-600 font-medium py-2 transition-colors duration-200">Tools</a>
+          <a href="/resources" class="text-gray-700 hover:text-primary-600 font-medium py-2 transition-colors duration-200">Resources</a>
+          <a href="/open-source" class="text-gray-700 hover:text-primary-600 font-medium py-2 transition-colors duration-200">Open Source</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl w-full text-center">
+      <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+        HiringStack
+      </h1>
+      
+      <p class="text-lg sm:text-xl text-gray-600 mb-4 leading-relaxed">
+        Practical tools and resources for engineering leaders building better hiring systems.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a href="job-description-evaluator.html" class="w-full sm:w-auto px-8 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors duration-200 shadow-md hover:shadow-lg">
+          Try the Tools
+        </a>
+        <a href="/resources" class="w-full sm:w-auto px-8 py-3 bg-white text-primary-600 font-semibold rounded-lg border-2 border-primary-600 hover:bg-primary-50 transition-colors duration-200">
+          Get Resources
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-200 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p class="text-center text-sm text-gray-500">
+        Built by <a href="https://linkedin.com/in/hamidmoosavian" class="text-primary-600 hover:text-primary-700 font-medium transition-colors duration-200">Hamid Moosavian</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Mobile Menu Toggle Script -->
+  <script>
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    });
+  </script>
 </body>
 </html>
